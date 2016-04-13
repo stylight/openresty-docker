@@ -1,6 +1,6 @@
 FROM alpine:3.3
 
-MAINTAINER Stylight
+MAINTAINER Stylight <open-source@stylight.com>
 
 ENV NGINX_VERSION 1.9.7
 ENV OPENRESTY_VERSION 1.9.7.3
