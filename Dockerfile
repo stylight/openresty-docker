@@ -2,8 +2,10 @@ FROM alpine:3.3
 
 MAINTAINER Stylight <open-source@stylight.com>
 
-ENV NGINX_VERSION 1.9.7
 ENV OPENRESTY_VERSION 1.9.7.3
+# Open always adds another subversion to the end of
+# original NginX version number.
+ENV NGINX_VERSION ${OPENRESTY_VERSION%.*}
 
 ENV GPG_KEYS A0E98066
 ENV CONFIG "\
@@ -42,7 +44,6 @@ ENV CONFIG "\
 	--with-ipv6 \
 	"
 
-# ADD     openresty-$OPENRESTY_VERSION.tar.gz /usr/src/
 RUN \
 	addgroup -S nginx \
 	&& adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
