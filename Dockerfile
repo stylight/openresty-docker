@@ -2,7 +2,7 @@ FROM alpine:3.3
 
 MAINTAINER Stylight <open-source@stylight.com>
 
-ENV OPENRESTY_VERSION 1.11.2.1
+ENV OPENRESTY_VERSION 1.11.2
 
 ENV GPG_KEYS A0E98066
 ENV CONFIG "\
@@ -37,16 +37,14 @@ ENV CONFIG "\
 	--with-mail \
 	--with-mail_ssl_module \
 	--with-file-aio \
-	--with-luajit \
+        --with-luajit \
 	--with-ipv6 \
-	--add-dynamic-module=/usr/src/openresty-$OPENRESTY_VERSION/DataDome-Nginx-Master \
 	"
-
 
 # Open always adds another subversion to the end of \
 # original NginX version number. \
 RUN \
-	export NGINX_VERSION=${OPENRESTY_VERSION%.*} \
+        export NGINX_VERSION=${OPENRESTY_VERSION%.*} \
 	&& addgroup -S nginx \
 	&& adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
 	&& apk add --no-cache --virtual .build-deps \
@@ -59,12 +57,9 @@ RUN \
 		linux-headers \
 		curl \
 		gnupg \
-		perl \
-		ca-certificates \
-	&& update-ca-certificates \
+                perl \
 	&& curl -fSL https://openresty.org/download/openresty-$OPENRESTY_VERSION.tar.gz -o nginx.tar.gz \
 	&& curl -fSL https://openresty.org/download/openresty-$OPENRESTY_VERSION.tar.gz.asc -o nginx.tar.gz.asc \
-	&& wget https://package.datadome.co/linux/DataDome-Nginx-latest.tgz \
 	&& export GNUPGHOME="$(mktemp -d)" \
 	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEYS" \
 	&& gpg --batch --verify nginx.tar.gz.asc nginx.tar.gz \
@@ -72,10 +67,6 @@ RUN \
 	&& mkdir -p /usr/src \
 	&& tar -zxC /usr/src -f nginx.tar.gz \
 	&& rm nginx.tar.gz \
-	# Add DataDome as a Dynamic module
-	&& tar -zxvf DataDome-Nginx-latest.tgz \
-	&& rm -f DataDome-Nginx-latest.tgz \
-	&& mv DataDome-NginxDome* /usr/src/openresty-$OPENRESTY_VERSION/DataDome-Nginx-Master \
 	&& cd /usr/src/openresty-$OPENRESTY_VERSION \
 	&& ./configure $CONFIG --with-debug \
 	&& make \
@@ -97,9 +88,13 @@ RUN \
 	&& apk del .build-deps \
 	&& rm -rf /usr/src/openresty-$OPENRESTY_VERSION \
 	&& apk add --no-cache gettext ruby \
+	\
 	# forward request and error logs to docker log collector
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
+
+# COPY nginx.conf /etc/nginx/nginx.conf
+# COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80 443
 
