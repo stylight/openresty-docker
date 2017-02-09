@@ -1,8 +1,8 @@
-FROM alpine:3.5
+FROM alpine:3.4
 
 MAINTAINER Stylight <open-source@stylight.com>
 
-ENV OPENRESTY_VERSION 1.11.2.2
+ENV OPENRESTY_VERSION 1.11.2.1
 
 ENV GPG_KEYS A0E98066
 ENV CONFIG "\
