@@ -1,7 +1,6 @@
 OpenResty Docker
 ================
 
-** Merged into docker-library!!!! Don't use. Will be deleted**
 OpenResty Dockefile with various modules enabled.
 -------------------------------------------------
 
