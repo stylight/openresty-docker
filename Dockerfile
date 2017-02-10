@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:3.5
 
 MAINTAINER Stylight <open-source@stylight.com>
 
@@ -37,14 +37,15 @@ ENV CONFIG "\
 	--with-mail \
 	--with-mail_ssl_module \
 	--with-file-aio \
-        --with-luajit \
+    --with-luajit \
 	--with-ipv6 \
 	"
 
+ADD glibc-bin-2.23-r3.apk /glibc-bin-2.23-r3.apk
 # Open always adds another subversion to the end of \
 # original NginX version number. \
 RUN \
-        export NGINX_VERSION=${OPENRESTY_VERSION%.*} \
+       export NGINX_VERSION=${OPENRESTY_VERSION%.*} \
 	&& addgroup -S nginx \
 	&& adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
 	&& apk add --no-cache --virtual .build-deps \
@@ -87,7 +88,7 @@ RUN \
 	&& apk add --virtual .nginx-rundeps $runDeps \
 	&& apk del .build-deps \
 	&& rm -rf /usr/src/openresty-$OPENRESTY_VERSION \
-	&& apk add --no-cache gettext ruby \
+	&& apk add --no-cache gettext ruby libgcc \
 	\
 	# forward request and error logs to docker log collector
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
