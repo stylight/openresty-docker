@@ -41,7 +41,6 @@ ENV CONFIG "\
 	--with-ipv6 \
 	"
 
-ADD glibc-bin-2.23-r3.apk /glibc-bin-2.23-r3.apk
 # Open always adds another subversion to the end of \
 # original NginX version number. \
 RUN \
